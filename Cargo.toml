@@ -3,4 +3,5 @@ name = "slex"
 version = "0.1.0"
 edition = "2021"
 description = "A simple lexer for Rust"
+license = "MIT"
 [dependencies]

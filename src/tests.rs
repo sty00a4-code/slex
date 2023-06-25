@@ -35,3 +35,15 @@ fn keywords() {
     assert_eq!(tokens[2].value, Token::Symbol('='));
     assert_eq!(tokens[3].value, Token::Int(1));
 }
+#[test]
+fn simple_indent() {
+    use crate::indent_lexer::Lexer;
+    use crate::tokens::Token;
+    let mut lexer = Lexer::new("    1 + 2".to_string());
+    let lines = lexer.lex().unwrap();
+    assert_eq!(lines[0].len(), 3);
+    assert_eq!(lines[0].indent, 4);
+    assert_eq!(lines[0].tokens[0].value, Token::Int(1));
+    assert_eq!(lines[0].tokens[1].value, Token::Symbol('+'));
+    assert_eq!(lines[0].tokens[2].value, Token::Int(2));
+}

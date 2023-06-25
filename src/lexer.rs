@@ -2,12 +2,12 @@ use crate::error::{Error, ErrorType, Located, Position};
 use crate::tokens::Token;
 
 pub struct Lexer {
-    text: String,
-    symbols: Vec<String>,
-    keywords: Vec<String>,
-    idx: usize,
-    ln: usize,
-    col: usize,
+    pub text: String,
+    pub symbols: Vec<String>,
+    pub keywords: Vec<String>,
+    pub idx: usize,
+    pub ln: usize,
+    pub col: usize,
 }
 impl Lexer {
     pub fn new(text: String) -> Self {

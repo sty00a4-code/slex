@@ -23,12 +23,12 @@ impl Line {
 }
 
 pub struct Lexer {
-    lines: Vec<String>,
-    symbols: Vec<String>,
-    keywords: Vec<String>,
-    idx: usize,
-    ln: usize,
-    col: usize,
+    pub lines: Vec<String>,
+    pub symbols: Vec<String>,
+    pub keywords: Vec<String>,
+    pub idx: usize,
+    pub ln: usize,
+    pub col: usize,
 }
 impl Lexer {
     pub fn new(text: String) -> Self {

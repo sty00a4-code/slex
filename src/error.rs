@@ -68,8 +68,8 @@ pub enum ErrorType {
 }
 #[derive(Debug, Clone, PartialEq)]
 pub struct Error {
-    error_type: ErrorType,
-    pos: Position,
+    pub error_type: ErrorType,
+    pub pos: Position,
 }
 impl Error {
     pub fn new(error_type: ErrorType, pos: Position) -> Self {

@@ -1,11 +1,14 @@
-use std::{ops::Range, fmt::{Display, Debug}, error};
-
+use std::{
+    error,
+    fmt::{Debug, Display},
+    ops::Range,
+};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Position {
     pub idx: Range<usize>,
     pub ln: Range<usize>,
-    pub col: Range<usize>
+    pub col: Range<usize>,
 }
 impl Position {
     pub fn new(idx: Range<usize>, ln: Range<usize>, col: Range<usize>) -> Self {
@@ -19,7 +22,7 @@ impl Position {
 }
 pub struct Located<T> {
     pub value: T,
-    pub pos: Position
+    pub pos: Position,
 }
 impl<T> Located<T> {
     pub fn new(value: T, pos: Position) -> Self {
@@ -30,7 +33,7 @@ impl<T: Clone> Clone for Located<T> {
     fn clone(&self) -> Self {
         Self {
             value: self.value.clone(),
-            pos: self.pos.clone()
+            pos: self.pos.clone(),
         }
     }
 }
@@ -61,7 +64,7 @@ impl<T> std::ops::Deref for Located<T> {
 pub enum ErrorType {
     BadChar(char),
     UnclosedString,
-    InvalidSymbol(String)
+    InvalidSymbol(String),
 }
 #[derive(Debug, Clone, PartialEq)]
 pub struct Error {
@@ -76,9 +79,21 @@ impl Error {
 impl Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self.error_type {
-            ErrorType::BadChar(c) => write!(f, "bad character '{}' at {}, (ln: {}, col: {})", c, self.pos.idx.start, self.pos.ln.start, self.pos.col.start),
-            ErrorType::UnclosedString => write!(f, "unclosed string at {}, (ln: {}, col: {})", self.pos.idx.start, self.pos.ln.start, self.pos.col.start),
-            ErrorType::InvalidSymbol(s) => write!(f, "invalid symbol '{}' at {}, (ln: {}, col: {})", s, self.pos.idx.start, self.pos.ln.start, self.pos.col.start)
+            ErrorType::BadChar(c) => write!(
+                f,
+                "bad character '{}' at {}, (ln: {}, col: {})",
+                c, self.pos.idx.start, self.pos.ln.start, self.pos.col.start
+            ),
+            ErrorType::UnclosedString => write!(
+                f,
+                "unclosed string at {}, (ln: {}, col: {})",
+                self.pos.idx.start, self.pos.ln.start, self.pos.col.start
+            ),
+            ErrorType::InvalidSymbol(s) => write!(
+                f,
+                "invalid symbol '{}' at {}, (ln: {}, col: {})",
+                s, self.pos.idx.start, self.pos.ln.start, self.pos.col.start
+            ),
         }
     }
 }
@@ -93,7 +108,7 @@ impl error::Error for Error {
         match &self.error_type {
             ErrorType::BadChar(_) => "bad character",
             ErrorType::UnclosedString => "unclosed string",
-            ErrorType::InvalidSymbol(_) => "invalid symbol"
+            ErrorType::InvalidSymbol(_) => "invalid symbol",
         }
     }
 }

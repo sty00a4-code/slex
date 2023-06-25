@@ -1,20 +1,10 @@
 use crate::error::{Error, ErrorType, Located, Position};
-use std::fmt::Debug;
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum Token {
-    Ident(String),
-    Int(i64),
-    Float(f64),
-    Char(char),
-    String(String),
-    Symbol(char),
-    LongSymbol(String),
-}
+use crate::tokens::Token;
 
 pub struct Lexer {
     text: String,
     symbols: Vec<String>,
+    keywords: Vec<String>,
     idx: usize,
     ln: usize,
     col: usize,
@@ -24,6 +14,7 @@ impl Lexer {
         Self {
             text,
             symbols: vec![],
+            keywords: vec![],
             idx: 0,
             ln: 0,
             col: 0,
@@ -62,6 +53,10 @@ impl Lexer {
         self.symbols = symbols.iter().map(|symbol| symbol.to_string()).collect();
         self
     }
+    pub fn keywords(mut self, keywords: &[&str]) -> Self {
+        self.keywords = keywords.iter().map(|symbol| symbol.to_string()).collect();
+        self
+    }
     pub fn lex(&mut self) -> Result<Vec<Located<Token>>, Error> {
         let mut tokens = vec![];
         while let Some(c) = self.get() {
@@ -96,7 +91,14 @@ impl Lexer {
                         pos.extend(&self.pos());
                         ident.push(self.next_char().unwrap());
                     }
-                    tokens.push(Located::new(Token::Ident(ident), pos));
+                    tokens.push(Located::new(
+                        if self.keywords.contains(&ident) {
+                            Token::Keyword(ident)
+                        } else {
+                            Token::Ident(ident)
+                        },
+                        pos,
+                    ));
                 }
                 '\'' => {
                     let mut c = self.next_char().unwrap();

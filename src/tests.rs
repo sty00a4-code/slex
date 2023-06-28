@@ -25,7 +25,7 @@ fn symbols() {
 fn string() {
     use crate::lexer::Lexer;
     use crate::tokens::Token;
-    let mut lexer = Lexer::new(" \"hello\" ".to_string());
+    let mut lexer = Lexer::new(" \"hello\"".to_string());
     let tokens = lexer.lex().unwrap();
     assert_eq!(tokens.len(), 1);
     assert_eq!(tokens[0].value, Token::String("hello".to_string()));
@@ -34,7 +34,7 @@ fn string() {
 fn string_indent() {
     use crate::indent_lexer::Lexer;
     use crate::tokens::Token;
-    let mut lexer = Lexer::new(" \"hello\" ".to_string());
+    let mut lexer = Lexer::new(" \"hello\"".to_string());
     let lines = lexer.lex().unwrap();
     assert_eq!(lines[0].len(), 1);
     assert_eq!(lines[0].tokens[0].value, Token::String("hello".to_string()));

@@ -122,7 +122,11 @@ impl Lexer {
                 '"' => {
                     self.advance();
                     let mut string = String::new();
-                    while let Some(c) = self.next_char() {
+                    while let Some(c) = self.get() {
+                        if c == '"' {
+                            break;
+                        }
+                        let c = self.next_char().unwrap();
                         if c == '\\' {
                             let c = match self.next_char().unwrap() {
                                 'n' => '\n',
@@ -133,17 +137,17 @@ impl Lexer {
                                 _ => return Err(Error::new(ErrorType::BadChar(c), pos)),
                             };
                             string.push(c);
-                        } else if c == '"' {
-                            pos.extend(&self.pos());
-                            break;
                         } else {
                             string.push(c);
                         }
                     }
-                    if self.get().is_none() {
+                    if let Some('"') = self.get() {
+                        pos.extend(&self.pos());
+                        self.advance();
+                        tokens.push(Located::new(Token::String(string), pos));
+                    } else {
                         return Err(Error::new(ErrorType::UnclosedString, pos));
                     }
-                    tokens.push(Located::new(Token::String(string), pos));
                 }
                 _ => {
                     if self.has_symbols() {

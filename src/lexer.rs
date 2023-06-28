@@ -101,6 +101,7 @@ impl Lexer {
                     ));
                 }
                 '\'' => {
+                    self.advance();
                     let mut c = self.next_char().unwrap();
                     if c == '\\' {
                         c = match self.next_char().unwrap() {
@@ -119,6 +120,7 @@ impl Lexer {
                     tokens.push(Located::new(Token::Char(c), pos));
                 }
                 '"' => {
+                    self.advance();
                     let mut string = String::new();
                     while let Some(c) = self.next_char() {
                         if c == '\\' {

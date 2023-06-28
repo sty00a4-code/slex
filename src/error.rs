@@ -4,7 +4,7 @@ use std::{
     ops::Range,
 };
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct Position {
     pub idx: Range<usize>,
     pub ln: Range<usize>,

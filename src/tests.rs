@@ -97,11 +97,19 @@ fn keywords() {
 fn simple_indent() {
     use crate::indent_lexer::Lexer;
     use crate::tokens::Token;
-    let mut lexer = Lexer::new("    1 + 2".to_string());
+    let mut lexer = Lexer::new("    1 + 2\n2 3 4".to_string());
     let lines = lexer.lex().unwrap();
+    assert_eq!(lines.len(), 2);
+
     assert_eq!(lines[0].len(), 3);
     assert_eq!(lines[0].indent, 4);
     assert_eq!(lines[0].tokens[0].value, Token::Int(1));
     assert_eq!(lines[0].tokens[1].value, Token::Symbol('+'));
     assert_eq!(lines[0].tokens[2].value, Token::Int(2));
+
+    assert_eq!(lines[1].len(), 3);
+    assert_eq!(lines[1].indent, 0);
+    assert_eq!(lines[1].tokens[0].value, Token::Int(2));
+    assert_eq!(lines[1].tokens[1].value, Token::Int(3));
+    assert_eq!(lines[1].tokens[2].value, Token::Int(4));
 }

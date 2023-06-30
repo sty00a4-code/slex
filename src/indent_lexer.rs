@@ -59,7 +59,7 @@ impl Lexer {
     }
     pub fn get(&self) -> Option<char> {
         self.lines.get(self.ln).and_then(|line| {
-            line.get(self.idx..self.idx + 1)
+            line.get(self.col..self.col + 1)
                 .and_then(|s| s.chars().next())
         })
     }
@@ -221,7 +221,7 @@ impl Lexer {
                 tokens,
                 indent,
             });
-            self.advance_line()
+            self.advance_line();
         }
         Ok(lines)
     }
